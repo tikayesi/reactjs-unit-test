@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import App from './App';
+import App, { replaceCamelWithSpaces } from './App';
 
 // // - String renders learn react link merupakan sebuah string untuk memberitahu
 // // bagian mana yang error ketika dijalankan.
@@ -18,21 +18,21 @@ import App from './App';
 
 test('button has correct initial color', () => {
   render(<App/>)
-  const colorButton = screen.getByRole('button', {name: "Change to blue"})
-  expect(colorButton).toHaveStyle({backgroundColor: 'red'})
+  const colorButton = screen.getByRole('button', {name: "Change to Midnight Blue"})
+  expect(colorButton).toHaveStyle({backgroundColor: 'MediumVioletRed'})
   // click button
   fireEvent.click(colorButton);
   // expect button tobe blue
-  expect(colorButton).toHaveStyle({backgroundColor : 'blue'})
+  expect(colorButton).toHaveStyle({backgroundColor : 'MidnightBlue'})
   // expect button text to be 'Change to red'
-  expect(colorButton.textContent).toBe('Change to red')
+  expect(colorButton.textContent).toBe('Change to Medium Violet Red')
 
 })
 
 test('initial condition', () => {
   render(<App/>)
   // check that the button starts out enable
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
   expect(colorButton).toBeEnabled();
   // check that the button start out unchecked
   const checkBox = screen.getByRole('checkbox');
@@ -41,7 +41,7 @@ test('initial condition', () => {
 
 test('checked condition', () => {
   render(<App/>)
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
   const checkBox = screen.getByRole('checkbox', {name: "Enable - Disable button"});
   fireEvent.click(checkBox);
   expect(checkBox).toBeChecked();
@@ -53,9 +53,23 @@ test('checked condition', () => {
 
 test('grey button', () => {
   render(<App/>)
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
   const checkBox = screen.getByRole('checkbox', {name: "Enable - Disable button"});
   fireEvent.click(checkBox);
   expect(checkBox).toBeChecked();
   expect(colorButton).toHaveStyle({backgroundColor: 'grey'})
+})
+
+describe('spaces before camel-case capital letters', () => {
+  test('Works for no inner capital letter', () => {
+    expect(replaceCamelWithSpaces('Red')).toBe('Red')
+  })
+
+  test('Works for one inner capital letter', () => {
+    expect(replaceCamelWithSpaces('MidnightBlue')).toBe('Midnight Blue')
+  })
+
+  test('Works for multiple inner capital letter', () => {
+    expect(replaceCamelWithSpaces('MediumVioletRed')).toBe('Medium Violet Red')
+  })
 })
